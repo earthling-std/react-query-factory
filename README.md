@@ -1,5 +1,7 @@
 # React Query Factory Documentation
 
+### 📝 [Read article about the library here](https://dev.to/veljkoza/how-to-organize-your-api-layer-in-react-using-react-query-1mlm)
+
 ## Introduction
 
 The `react-query-factory` library provides a streamlined and type-safe approach to organizing your API layer in React applications when using TanStack's React Query. By simply providing a "service" object to the `createQueriesFromService` function, developers can generate a fully typesafe queries object, reducing boilerplate and enhancing code clarity and maintainability.
