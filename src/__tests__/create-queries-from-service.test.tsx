@@ -11,6 +11,10 @@ const mockPostData = jest.fn((data: {name: string}) => Promise.resolve(`posted $
 const mockService = {
   getData: mockGetData,
   postData: mockPostData,
+  nested: {
+    get: mockGetData,
+    post: mockPostData,
+  }
 };
 
 // Setup a QueryClient to wrap our hooks within a provider
@@ -61,5 +65,25 @@ describe('createQueriesFromService', () => {
     });
     await waitFor(() => mutationResult.current.data);
     expect(mutationResult.current.data).toBe(`posted ${param.name}`);
+  });
+
+  it('generates useQuery and useMutation hooks for nested object', async () => {
+    const { nested } = createQueriesFromService(mockService, 'testPrefix');
+
+    // Test useQuery hook
+    const { result: queryResult } = renderHook(() => nested.get.useQuery(), { wrapper });
+    await waitFor(() => queryResult.current.isSuccess);
+    expect(queryResult.current.data).toBe('data');
+    
+    // Test queryKey
+    expect(nested.get.queryKey()).toEqual(['testPrefix', 'nested', 'get', undefined]);
+
+    // Test useMutation hook
+    const { result: mutationResult } = renderHook(() => nested.get.useMutation(), { wrapper });
+    await act(async () => {
+      mutationResult.current.mutate();
+    });
+    await waitFor(() => mutationResult.current.isSuccess);
+    expect(mutationResult.current.data).toBe('data');
   });
 });
