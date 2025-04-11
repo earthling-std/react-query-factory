@@ -58,11 +58,11 @@ function generateObject<TParams, TResult>(
 
 type ServiceToQueries<T> = {
   [K in keyof T]: T[K] extends (...args: infer P) => Promise<infer R>
-    ? P extends [infer Params]
+    ? P extends [infer Params] // Allow optional parameters
       ? {
-          useQuery: UseQueryFnWithParams<Params, R>;
-          useMutation: UseMutationFnWithParams<Params, R>;
-          queryKey: (params: Params) => QueryKey;
+          useQuery: UseQueryFnWithParams<Params | void, R>; // Support undefined for optional params
+          useMutation: UseMutationFnWithParams<Params | void, R>;
+          queryKey: (params?: Params) => QueryKey; // Make params optional in queryKey
         }
       : {
           useQuery: UseQueryFnWithoutParams<R>;
