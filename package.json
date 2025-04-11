@@ -1,7 +1,7 @@
 {
   "name": "@earthling/react-query-factory",
   "access": "public",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Create API client for your React app with just one line of code, using React Query!",
   "main": "dist/cjs/bundle.js",
   "module": "dist/esm/bundle.js",
