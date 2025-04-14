@@ -65,16 +65,16 @@ function generateObject<TParams, TResult>(
 type ArgumentTypes<F> = F extends (args: infer A) => any ? A : never;
 
 type ServiceToQueries<T> = {
-  [K in keyof T]: T[K] extends (...args: infer P) => Promise<any> // Check if T[K] is a function
+  [K in keyof T]: T[K] extends (...args: infer P) => Promise<infer R> // Check if T[K] is a function
     ? P extends [] 
       ? {
-          useQuery: UseQueryFnWithoutParams<T[K]>;
-          useMutation: UseMutationFnWithoutParams<T[K]>;
+          useQuery: UseQueryFnWithoutParams<R>;
+          useMutation: UseMutationFnWithoutParams<R>;
           queryKey: () => QueryKey;
         }
       : {
-          useQuery: UseQueryFnWithParams<ArgumentTypes<T[K]>, T[K]>;
-          useMutation: UseMutationFnWithParams<ArgumentTypes<T[K]>, T[K]>;
+          useQuery: UseQueryFnWithParams<ArgumentTypes<T[K]>, R>;
+          useMutation: UseMutationFnWithParams<ArgumentTypes<T[K]>, R>;
           queryKey: (params?: ArgumentTypes<T[K]>) => QueryKey;
         }
     : T[K] extends object // Ensure recursion applies only to objects

@@ -29,7 +29,7 @@ const wrapper = ({ children }: PropsWithChildren) => (
 describe('createQueriesFromService', () => {
   it('generates useQuery and useMutation hooks for functions without parameters', async () => {
     const { getData } = createQueriesFromService(mockService, 'testPrefix');
-
+    
     // Test useQuery hook
     const { result: queryResult } = renderHook(() => getData.useQuery(), { wrapper });
     await waitFor(() => queryResult.current.isSuccess);
