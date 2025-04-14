@@ -20,7 +20,7 @@ type UseQueryFnWithoutParams<TResult = unknown> = (
 ) => UseQueryResult<TResult, unknown>;
 
 type UseQueryFnWithParams<TParams, TResult = unknown> = (
-  params: TParams,
+  params?: TParams,
   options?: Omit<
     UseQueryOptions<TResult, unknown, TResult, QueryKey>,
     'queryKey' | 'queryFn'

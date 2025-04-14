@@ -4,8 +4,9 @@ import { createQueriesFromService } from '../lib/create-queries-from-service';
 import React, { PropsWithChildren } from 'react';
 
 // Mock service functions
+type X =  {name: string};
 const mockGetData = jest.fn(() => Promise.resolve('data'));
-const mockPostData = jest.fn((data: {name: string}) => Promise.resolve(`posted ${data?.name}`));
+const mockPostData = (data?: X) => Promise.resolve(`posted ${data?.name}`);
 
 // Mock service object
 const mockService = {
@@ -48,10 +49,9 @@ describe('createQueriesFromService', () => {
 
   it('generates useQuery and useMutation hooks for functions with parameters', async () => {
     const { postData } = createQueriesFromService(mockService, 'testPrefix');
-
     // Test useQuery hook with parameter
-    const param = {name: 'veljkoza'};
-    const { result: queryResult } = renderHook(() => postData.useQuery({name: 'veljkoza'}), { wrapper });
+    const param: X = {name: 'veljkoza'};
+    const { result: queryResult } = renderHook(() => postData.useQuery(param), { wrapper });
     const { result: queryResult1 } = renderHook(() => postData.useQuery(), { wrapper });
     
     await waitFor(() => queryResult.current.data);
@@ -60,6 +60,7 @@ describe('createQueriesFromService', () => {
 
     // Test queryKey with parameter
     expect(postData.queryKey(param)).toEqual(['testPrefix', 'postData', {...param}]);
+    expect(postData.queryKey()).toEqual(['testPrefix', 'postData']);
 
     // Test useMutation hook with parameter
     const { result: mutationResult } = renderHook(() => postData.useMutation(), { wrapper });
